@@ -20,5 +20,8 @@ COPY files/php/php-fpm.conf /etc/php7/
 COPY files/php/phpinfo.php /var/www/app/index.php
 COPY files/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY files/services.d /etc/services.d
+COPY files/docker-entrypoint.sh //docker-entrypoint.sh
+
+WORKDIR /var/www/app
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
