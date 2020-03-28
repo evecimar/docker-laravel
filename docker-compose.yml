@@ -1,0 +1,8 @@
+version: '3.2'
+services:
+  laravel:
+    container_name: laravel
+    image: evecimar/laravel:7x-php74
+    build:
+      context: ./
+      dockerfile: Dockerfile
