@@ -7,6 +7,7 @@ RUN apk --update add ca-certificates
 RUN echo "https://dl.bintray.com/php-alpine/v3.9/php-7.4" >> /etc/apk/repositories
 
 RUN apk add --update nginx git bash php-fpm php-bcmath php-ctype php-json php-mbstring php-openssl php-pdo php-xml php-phar \
+    && php-dom php-curl php-common php-json php-mysql php-xml php-zip && \
     && ln -s /usr/bin/php7 /usr/bin/php
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
