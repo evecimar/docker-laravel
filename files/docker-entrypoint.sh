@@ -60,6 +60,5 @@ fi
 #/bin/s6-svscan
 #/etc/services.d
 
-crond
 nginx
-php-fpm7
+php-fpm
