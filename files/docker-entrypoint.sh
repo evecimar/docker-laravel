@@ -22,24 +22,20 @@ then
     project_dir=/var/www/app/${repo%%.git*}
     mv $project_dir/* /var/www/app/
     
-    file="docker/nginx.conf"
-    if [ -f "$file" ]
-    then
-        mv docker/nginx.conf /etc/nginx/nginx.conf
-    fi
-    
-    file="docker/custom-command.sh"
-    if [ -f "$file" ]
-    then
-        mv docker/custom-command.sh /custom-command.sh
-        chmod +x /custom-command.sh
-        /custom-command.sh
-    fi
-    file="composer.json"
-    if [ -f "$file" ]
-    then
-        composer install
-    fi
+fi
+
+file="docker/nginx.conf"
+if [ -f "$file" ]
+then
+    mv docker/nginx.conf /etc/nginx/nginx.conf
+fi
+
+file="docker/custom_command.sh"
+if [ -f "$file" ]
+then
+    mv docker/custom_command.sh /custom_command.sh
+    chmod +x /custom_command.sh
+    /custom_command.sh
 fi
 
 if [ ! -z $nginx ]
@@ -56,6 +52,17 @@ then
     chmod +x /start.sh
     /start.sh
 fi
+
+# For Newrelic's APM (Application Monitoring) license and appname are required.
+# Enviroment variables `NEW_RELIC_LICENSE_KEY` and `NEW_RELIC_APP_NAME` are required when buidling Docker image,
+# so you must set them in your **BuildConfig** Environments.
+if [ "$APP_STAGE" != "dev" ]
+then
+    sed -i \
+        -e "s/newrelic.license =.*/newrelic.license = ${NEW_RELIC_LICENSE_KEY}/" \
+        -e "s/newrelic.appname =.*/newrelic.appname = ${NEW_RELIC_APP_NAME}/" \
+        /usr/local/etc/php/conf.d/newrelic.ini
+fi 
 
 #/bin/s6-svscan
 #/etc/services.d
