@@ -27,13 +27,13 @@ fi
 file="docker/nginx.conf"
 if [ -f "$file" ]
 then
-    mv docker/nginx.conf /etc/nginx/nginx.conf
+    cp docker/nginx.conf /etc/nginx/nginx.conf
 fi
 
 file="docker/custom_command.sh"
 if [ -f "$file" ]
 then
-    mv docker/custom_command.sh /custom_command.sh
+    cp docker/custom_command.sh /custom_command.sh
     chmod +x /custom_command.sh
     /custom_command.sh
 fi
@@ -42,7 +42,7 @@ if [ ! -z $nginx ]
 then
     rm /nginx.conf
     wget -O /nginx.conf $nginx_conf_url
-    mv /nginx.conf /etc/nginx/nginx.conf
+    cp /nginx.conf /etc/nginx/nginx.conf
 fi
 
 if [ ! -z $command ]
@@ -62,10 +62,6 @@ then
         -e "s/newrelic.license =.*/newrelic.license = ${NEW_RELIC_LICENSE_KEY}/" \
         -e "s/newrelic.appname =.*/newrelic.appname = ${NEW_RELIC_APP_NAME}/" \
         /usr/local/etc/php/conf.d/newrelic.ini
-fi 
+fi
 
-#/bin/s6-svscan
-#/etc/services.d
-
-nginx
-php-fpm
+/usr/bin/supervisord

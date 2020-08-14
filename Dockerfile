@@ -6,7 +6,7 @@ RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
     install-php-extensions bcmath ctype json mbstring openssl pdo pdo_dblib pdo_mysql pdo_odbc pdo_pgsql pdo_sqlsrv xml phar dom \
     curl zip session xmlwriter simplexml fileinfo tokenizer intl
 
-RUN apt-get update && apt-get install -y nginx git bash wget \
+RUN apt-get update && apt-get install -y nginx git bash wget supervisor \
     && ln -s /usr/bin/php7 /usr/bin/php
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
@@ -32,6 +32,7 @@ COPY files/php/phpinfo.php /var/www/app/index.php
 COPY files/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY files/services.d /etc/services.d
 COPY files/docker-entrypoint.sh /docker-entrypoint.sh
+COPY files/supervisor/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
 WORKDIR /var/www/app
 
