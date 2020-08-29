@@ -22,11 +22,15 @@ RUN mkdir -p /var/log/newrelic /var/run/newrelic && \
 
 # Download and install Newrelic binary
 RUN export NEWRELIC_VERSION=$(curl -sS https://download.newrelic.com/php_agent/release/ | sed -n 's/.*>\(.*linux\).tar.gz<.*/\1/p') && \
-    cd /tmp && curl -sS "https://download.newrelic.com/php_agent/release/${NEWRELIC_VERSION}.tar.gz" | gzip -dc | tar xf - && \
-    cd "${NEWRELIC_VERSION}" && \
-    NR_INSTALL_SILENT=true ./newrelic-install install && \
-    rm -f /var/run/newrelic-daemon.pid && \
-    rm -f /tmp/.newrelic.sock
+  curl -L "https://download.newrelic.com/php_agent/release/${NEWRELIC_VERSION}.tar.gz" | tar -C /tmp -zx && \
+  export NR_INSTALL_USE_CP_NOT_LN=1 && \
+  export NR_INSTALL_SILENT=1 && \
+  /tmp/newrelic-php5-*/newrelic-install install && \
+  rm -rf /tmp/newrelic-php5-* /tmp/nrinstall* && \
+  sed -i \
+      -e 's/;newrelic.daemon.app_connect_timeout =.*/newrelic.daemon.app_connect_timeout=15s/' \
+      -e 's/;newrelic.daemon.start_timeout =.*/newrelic.daemon.start_timeout=5s/' \
+      /usr/local/etc/php/conf.d/newrelic.ini
 
 COPY files/php/phpinfo.php /var/www/app/index.php
 COPY files/nginx/nginx.conf /etc/nginx/nginx.conf

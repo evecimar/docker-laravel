@@ -64,4 +64,4 @@ then
         /usr/local/etc/php/conf.d/newrelic.ini
 fi
 
-/usr/bin/supervisord
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisor.conf
