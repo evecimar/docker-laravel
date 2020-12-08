@@ -4,7 +4,7 @@ ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/mas
 
 RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
     install-php-extensions bcmath ctype json mbstring openssl pdo pdo_dblib pdo_mysql pdo_odbc pdo_pgsql pdo_sqlsrv xml phar dom \
-    curl zip session xmlwriter simplexml fileinfo tokenizer intl
+    curl zip session xmlwriter simplexml fileinfo tokenizer intl redis
 
 RUN apt-get update && apt-get install -y nginx git bash wget supervisor \
     && ln -s /usr/bin/php7 /usr/bin/php
