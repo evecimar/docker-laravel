@@ -32,6 +32,10 @@ RUN export NEWRELIC_VERSION=$(curl -sS https://download.newrelic.com/php_agent/r
       -e 's/;newrelic.daemon.start_timeout =.*/newrelic.daemon.start_timeout=5s/' \
       /usr/local/etc/php/conf.d/newrelic.ini
 
+RUN pecl install -f swoole-4.8.5 \
+    && docker-php-ext-enable swoole;
+
+
 COPY files/php/phpinfo.php /var/www/app/index.php
 COPY files/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY files/services.d /etc/services.d
